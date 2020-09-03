@@ -21,8 +21,7 @@
     			<navbar></navbar>
     		</div>
     		<div class="container">
-    			<eventgenerator></eventgenerator>
-    			<calendar></calendar>
+    			<app></app>
     		</div>
     	</div>
     	

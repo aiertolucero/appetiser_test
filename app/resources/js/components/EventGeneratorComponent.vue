@@ -29,13 +29,14 @@
     </div>
     <div class="row">
       <div class="col-12 pt-3">
-        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-primary" @click="saveEvent">Save</button>
       </div>
     </div>
 </div>
 </template>
 
 <script>
+  import moment from 'moment'
   export default {
     data() {
       return {
@@ -53,6 +54,32 @@
           { item: 'Saturday', name: 'Saturday' },
         ]
       }
+    },
+    methods: {
+        saveEvent: function() {
+          let start = moment(this.fromdate);
+          let end   = moment(this.todate);
+          var arr = [];
+          var view = [];
+          let tmp = start.clone();
+
+          while( tmp.isBefore(end) ){
+            this.days.forEach(weekday => {
+              if(tmp.day(weekday).isSameOrAfter(start)){
+                var toPushDay = tmp.day(weekday);
+                arr.push(toPushDay);
+                view.push({
+                  startDate : toPushDay.toDate(),
+                  endDate : toPushDay.toDate(),
+                  color : 'yellow'
+                })
+              }
+            })
+            tmp.add(1, 'w');
+          }
+
+          this.$emit('displayDates',view);
+        }  
     }
   }
 </script>

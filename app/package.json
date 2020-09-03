@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-vue": "^2.16.0",
+        "moment": "^2.27.0",
         "v-year-calendar": "^1.0.2"
     }
 }
