@@ -11,5 +11,5 @@ class EventDetails extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','day','event_id'];
+    protected $fillable = ['date','event_id'];
 }

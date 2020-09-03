@@ -14,3 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'EventsController@index');
+Route::post('/saveEvent', 'EventsController@saveEvent');
+Route::get('/getEvents', 'EventsController@getEvents');

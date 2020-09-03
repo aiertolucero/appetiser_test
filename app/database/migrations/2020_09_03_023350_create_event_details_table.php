@@ -15,8 +15,7 @@ class CreateEventDetailsTable extends Migration
     {
         Schema::create('event_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('day', ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
+            $table->date('date');
             $table->integer('event_id');
             $table->timestamps();
         });

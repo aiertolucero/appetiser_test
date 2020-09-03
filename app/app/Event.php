@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {   
+	protected $table = 'event';
 	/**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['from_date','to_date'];
+    protected $fillable = ['name'];
 }

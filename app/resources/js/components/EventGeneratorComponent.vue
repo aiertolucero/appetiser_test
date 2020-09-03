@@ -1,5 +1,11 @@
 <template>
   <div class="p-4" style="background:#e2e2e2">
+    <p v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+    </p>
     <div class="row">
       <div class="col-12">
         <label>Event</label>
@@ -29,7 +35,7 @@
     </div>
     <div class="row">
       <div class="col-12 pt-3">
-        <button class="btn btn-primary" @click="saveEvent">Save</button>
+        <button class="btn btn-primary" @click="onSaveEvent">Save</button>
       </div>
     </div>
 </div>
@@ -40,46 +46,71 @@
   export default {
     data() {
       return {
-        fromdate: '',
-        todate: '',
-        eventname: '',
+        errors: [],
+        fromdate: null,
+        todate: null,
+        eventname: null,
         days: [],
         options: [
-          { item: 'Sunday', name: 'Sunday' },
-          { item: 'Monday', name: 'Monday' },
-          { item: 'Tuesday', name: 'Tuesday' },
-          { item: 'Wednesday', name: 'Wednesday' },
-          { item: 'Thursday', name: 'Thursday' },
-          { item: 'Friday', name: 'Friday' },
-          { item: 'Saturday', name: 'Saturday' },
+          { item: '0', name: 'Sunday' },
+          { item: '1', name: 'Monday' },
+          { item: '2', name: 'Tuesday' },
+          { item: '3', name: 'Wednesday' },
+          { item: '4', name: 'Thursday' },
+          { item: '5', name: 'Friday' },
+          { item: '6', name: 'Saturday' },
         ]
       }
     },
     methods: {
-        saveEvent: function() {
-          let start = moment(this.fromdate);
-          let end   = moment(this.todate);
-          var arr = [];
-          var view = [];
-          let tmp = start.clone();
+        onSaveEvent: function() {
+          if(this.checkForm()){
+            let start = moment(this.fromdate);
+            let end   = moment(this.todate);
+            var arr = [];
+            var view = [];
+            let tmp = start.clone();
 
-          while( tmp.isBefore(end) ){
-            this.days.forEach(weekday => {
-              if(tmp.day(weekday).isSameOrAfter(start)){
-                var toPushDay = tmp.day(weekday);
-                arr.push(toPushDay);
-                view.push({
-                  startDate : toPushDay.toDate(),
-                  endDate : toPushDay.toDate(),
-                  color : 'yellow'
-                })
-              }
-            })
-            tmp.add(1, 'w');
+            while( tmp.isSameOrBefore(end) ){
+              this.days.forEach(weekday => {
+                  if(tmp.weekday() == weekday){
+                    arr.push(tmp.format('YYYY-MM-DD'));
+                    view.push({
+                      startDate : tmp.toDate(),
+                      endDate : tmp.toDate(),
+                      color : 'blue'
+                    })
+                  }
+              })
+              tmp.add(1, 'd');
+            }
+
+            this.$emit('saveEvents', {
+                calendarDates : view,
+                eventName: this.eventname,
+                dates: arr
+            });
+          }
+        },
+        checkForm: function (e) {
+          if (this.eventname && this.todate && this.fromdate) {
+            return true;
           }
 
-          this.$emit('displayDates',view);
-        }  
+          this.errors = [];
+
+          if (!this.eventname) {
+            this.errors.push('Event Name required.');
+          }
+          if (!this.todate) {
+            this.errors.push('Start Date required.');
+          }
+          if (!this.fromdate) {
+            this.errors.push('End Date required.');
+          }
+
+          e.preventDefault();
+        }
     }
   }
 </script>
